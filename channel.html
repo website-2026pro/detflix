@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DETFLIX</title>
+</head>
+    <style>
+       :root {
+            color-scheme: dark;
+            --bg-start: #060617;
+            --bg-end: #0f092a;
+            --primary: #7f5bff;
+            --primary-soft: rgba(127, 91, 255, 0.18);
+            --text: #edf0ff;
+            --muted: #bcb8dc;
+            --surface: rgba(14, 8, 33, 0.92);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Inter', Arial, sans-serif;
+            background: radial-gradient(circle at top left, rgba(127, 91, 255, 0.22), transparent 24%),
+                        radial-gradient(circle at bottom right, rgba(34, 213, 255, 0.16), transparent 18%),
+                        linear-gradient(180deg, var(--bg-start), var(--bg-end));
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            overflow-x: hidden;
+            animation: bgMove 18s ease-in-out infinite;
+        }
+
+        .page-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 980px;
+            padding: 36px;
+            border-radius: 32px;
+            background: rgba(14, 8, 33, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 40px 120px rgba(0, 0, 0, 0.34);
+            backdrop-filter: blur(16px);
+            overflow: hidden;
+            animation: fadeUp 1s ease both;
+        }
+
+        .page-wrapper::before,
+        .page-wrapper::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .page-wrapper::before {
+            width: 260px;
+            height: 260px;
+            top: -90px;
+            right: -70px;
+            background: radial-gradient(circle, rgba(127, 91, 255, 0.24), transparent 58%);
+            filter: blur(14px);
+            animation: floatDot 13s ease-in-out infinite;
+        }
+
+        .page-wrapper::after {
+            width: 180px;
+            height: 180px;
+            bottom: -80px;
+            left: -60px;
+            background: radial-gradient(circle, rgba(34, 213, 255, 0.16), transparent 58%);
+            filter: blur(16px);
+            animation: floatDot 15s ease-in-out infinite reverse;
+        }
+
+        .hero {
+            display: grid;
+            gap: 22px;
+            justify-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            letter-spacing: 0.18em;
+            color: #f7f6ff;
+            text-transform: uppercase;
+            text-shadow: 0 0 30px rgba(127, 91, 255, 0.36);
+            animation: glowText 3s ease-in-out infinite;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 1rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.88;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            width: 100%;
+        }
+
+        .link-button {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 54px;
+            padding: 0 22px;
+            border-radius: 999px;
+            border: 1px solid rgba(127, 91, 255, 0.28);
+            background: linear-gradient(145deg, rgba(127, 91, 255, 0.18), rgba(29, 11, 69, 0.96));
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            overflow: hidden;
+            box-shadow: 0 20px 42px rgba(17, 7, 58, 0.18);
+            transition: transform 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
+            animation: buttonPulse 6s ease-in-out infinite;
+        }
+
+        .link-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.16), transparent 45%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .link-button::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            left: -24px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(127, 91, 255, 0.1);
+            opacity: 0;
+            transition: transform 0.35s ease, opacity 0.35s ease;
+        }
+
+        .link-button:hover::before {
+            opacity: 1;
+        }
+
+        .link-button:hover::after {
+            opacity: 1;
+            transform: translateY(-50%) translateX(10px) scale(1.06);
+        }
+
+        .link-button:hover,
+        .link-button:focus-visible {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 26px 88px rgba(127, 91, 255, 0.24);
+            background: linear-gradient(145deg, rgba(127, 91, 255, 0.34), rgba(60, 18, 91, 0.98));
+        }
+
+        .link-button:active {
+            transform: translateY(0);
+        }
+
+        .section {
+            margin-top: 32px;
+            display: grid;
+            gap: 20px;
+        }
+
+        .section-headline {
+            text-align: center;
+            color: #d2d0e6;
+            font-size: 1.25rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .feature-grid {
+            display: grid;
+            gap: 18px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .feature-card {
+            padding: 22px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 18px 46px rgba(0, 0, 0, 0.18);
+            backdrop-filter: blur(14px);
+            transition: transform 0.28s ease, border-color 0.28s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(127, 91, 255, 0.34);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 10px;
+            color: #f6f5ff;
+            font-size: 1.05rem;
+        }
+
+        .feature-card p {
+            color: var(--muted);
+            line-height: 1.75;
+            font-size: 0.96rem;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { background-position: left top, right bottom; }
+            50% { background-position: 10% 10%, 90% 90%; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes floatDot {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-14px) rotate(18deg); }
+        }
+
+        @keyframes glowText {
+            0%, 100% { text-shadow: 0 0 24px rgba(127, 91, 255, 0.32); }
+            50% { text-shadow: 0 0 48px rgba(127, 91, 255, 0.68); }
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 20px 42px rgba(17, 7, 58, 0.18); }
+            50% { transform: translateY(-1px) scale(1.005); box-shadow: 0 28px 68px rgba(127, 91, 255, 0.24); }
+        }
+
+        @media (max-width: 760px) {
+            .page-wrapper { padding: 26px; }
+            .button-grid { gap: 12px; }
+        }
+
+        @media (max-width: 560px) {
+            body { padding: 16px; }
+            .page-wrapper { padding: 22px; }
+            .link-button { min-height: 48px; font-size: 0.92rem; }
+            .hero h1 { font-size: clamp(2.5rem, 12vw, 3.8rem); }
+        } 
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="hero">
+            <div class="glow-ring"></div>
+            <h1>DETFLIX</h1>
+            <p class="subtitle">movie · anime · drama · series</p>
+            <div class="button-grid">
+                <a class="link-button" href="https://hdhub4u.glass/">hdhub4u</a>
+                <a class="link-button" href="https://movies4u.ee/">movie4u</a>
+                <a class="link-button" href="https://moviesdrives.cv/">moviedrive</a>
+                <a class="link-button" href="https://dramasmood.fun/">dramasmod</a>
+                <a class="link-button" href="https://vegamovies.diamonds/">vegamovies</a>
+                <a class="link-button" href="https://uhdmovies.rodeo/">UHDMovies</a>
+                <a class="link-button" href="https://moviesleech.rodeo/">TOPmovies</a>
+                <a class="link-button" href="https://moviesmod.farm/">moviesmod</a>
+            </div>
+            <h3 style="margin-top: 28px; font-size: 1.25rem; color: var(--muted); opacity: 0.88;">ANIMEFLIX</h3>
+                <div class="button-grid">
+                    <a class="link-button" href="https://animeflix.dad/">animeflix</a>
+                </div>
+            </div>
+            <h3 style="margin-top: 28px; font-size: 1.25rem; color: var(--muted); opacity: 0.88;">PC : GAME/APP</h3><br>
+                <div class="button-grid">
+                    <a class="link-button" href="https://gamesleech.com/">PC GAMES</a>
+                    <a class="link-button" href="https://softwareleech.com/">PC APPS</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
